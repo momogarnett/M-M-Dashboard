@@ -31,8 +31,8 @@ export default function Home() {
             <span>Base app shell with navigation and footer</span>
           </div>
           <div className="flex items-center">
-            <span className="text-gray-400 text-2xl mr-3">→</span>
-            <span className="text-gray-600">Prisma + Supabase setup (next)</span>
+            <span className="text-mm-orange text-2xl mr-3">✓</span>
+            <span>Prisma + Supabase connected and migrated</span>
           </div>
           <div className="flex items-center">
             <span className="text-gray-400 text-2xl mr-3">→</span>
