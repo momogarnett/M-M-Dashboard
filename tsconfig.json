@@ -22,10 +22,11 @@
     "allowJs": true,
     "checkJs": false,
     "jsx": "react-jsx",
-    "declaration": true,
-    "declarationMap": true,
+    "declaration": false,
+    "declarationMap": false,
     "sourceMap": true,
     "outDir": "./.next",
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [
