@@ -1,10 +1,11 @@
 import NextAuth from 'next-auth'
 import Google from 'next-auth/providers/google'
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/lib/prisma'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  secret: process.env.AUTH_SECRET,
+  trustHost: true,
+  session: { strategy: 'jwt' },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -14,23 +15,44 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false
-      const dbUser = await prisma.user.findUnique({
-        where: { email: user.email },
-      })
-      if (dbUser && !dbUser.approved) return '/auth/pending'
-      return true
+      try {
+        // Create user if they don't exist
+        await prisma.user.upsert({
+          where: { email: user.email },
+          update: { name: user.name ?? undefined, image: user.image ?? undefined },
+          create: {
+            email: user.email,
+            name: user.name ?? null,
+            image: user.image ?? null,
+            role: 'READ_ONLY',
+            approved: false,
+          },
+        })
+        return true
+      } catch (e) {
+        console.error('signIn error:', e)
+        return false
+      }
     },
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id
+    async jwt({ token, user }) {
+      if (user?.email) {
         const dbUser = await prisma.user.findUnique({
-          where: { id: user.id },
-          select: { role: true, approved: true },
+          where: { email: user.email },
+          select: { id: true, role: true, approved: true },
         })
         if (dbUser) {
-          session.user.role = dbUser.role
-          session.user.approved = dbUser.approved
+          token.id = dbUser.id
+          token.role = dbUser.role
+          token.approved = dbUser.approved
         }
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string
+        session.user.role = token.role as string
+        session.user.approved = token.approved as boolean
       }
       return session
     },

@@ -1,11 +1,40 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-mm-orange: #FF6600;
+  --color-mm-blue: #0052CC;
+  --color-mm-cyan: #00CCFF;
+  --color-mm-light: #F5F5F5;
+  --color-mm-dark: #1A1A1A;
+  --color-primary: #FF6600;
+  --color-secondary: #0052CC;
+  --color-accent: #00CCFF;
+  --font-sans: var(--font-league-spartan), system-ui, sans-serif;
+}
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.30; transform: scale(1.08); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.animate-glow-1 { animation: pulse-glow 5s ease-in-out infinite; }
+.animate-glow-2 { animation: pulse-glow 6s ease-in-out infinite 1.5s; }
+.animate-glow-3 { animation: pulse-glow 7s ease-in-out infinite 3s; }
+.animate-glow-4 { animation: pulse-glow 4s ease-in-out infinite 0.8s; }
+
+.btn-shimmer:hover .shimmer-line {
+  animation: shimmer 0.7s ease forwards;
 }
 
 html {
