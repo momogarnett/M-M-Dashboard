@@ -15,7 +15,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
             <span className="text-xl font-bold">M&M Dashboard</span>
           </div>
           <div className="flex items-center gap-6">
-            <span className="text-sm text-white/70">{session.user.name}</span>
+            <span className="text-sm text-white/70">{session.user.name ?? session.user.email}</span>
             <SignOutButton />
           </div>
         </div>

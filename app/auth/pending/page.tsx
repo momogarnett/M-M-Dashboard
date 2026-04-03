@@ -1,3 +1,6 @@
+'use client'
+import { signOut } from 'next-auth/react'
+
 export default function PendingPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-mm-light">
@@ -9,6 +12,12 @@ export default function PendingPage() {
         <p className="text-gray-400 text-sm mt-4">
           You will be notified once your access is approved.
         </p>
+        <button
+          onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+          className="mt-8 text-sm text-gray-400 hover:text-mm-blue underline cursor-pointer transition-colors"
+        >
+          Sign out
+        </button>
       </div>
     </div>
   )

@@ -1,12 +1,13 @@
-export default function AuthError({
+export default async function AuthError({
   searchParams,
 }: {
-  searchParams: { error?: string }
+  searchParams: Promise<{ error?: string }>
 }) {
+  const { error } = await searchParams
   return (
     <div style={{ padding: 40, fontFamily: 'monospace' }}>
       <h1>Auth Error</h1>
-      <p>Error: <strong>{searchParams.error || 'unknown'}</strong></p>
+      <p>Error: <strong>{error || 'unknown'}</strong></p>
     </div>
   )
 }
